@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 
+/*
 class ToDo extends React.Component {
   constructor(props) {
     super(props);
@@ -29,5 +30,24 @@ class ToDo extends React.Component {
     );
   }
 }
+*/
 
-export default ToDo
+const NewToDo = (props) => {
+  const [todoCheckFlag, setTodoCheckFlag] = useState(false)
+  const handleInputChange = (e) => {
+    const target = e.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    setTodoCheckFlag(value)
+    props.onChangeChecked(props.data.id, value)
+  }
+  const deleteTodo = () => { props.onDelete(props.data.id) }
+  return (
+    <div>
+      <input type="checkbox" checked={todoCheckFlag} onChange={handleInputChange} />&nbsp;&nbsp;
+      <span>{props.data.todo}</span>&nbsp;&nbsp;
+      <button onClick={deleteTodo }>x</button>
+    </div>
+  );
+}
+
+export default NewToDo

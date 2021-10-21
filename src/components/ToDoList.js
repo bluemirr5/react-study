@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import ToDo from "./ToDo";
 
+/*
 class ToDoList extends React.Component {
   constructor() {
     super();
@@ -67,5 +68,57 @@ class ToDoList extends React.Component {
     );
   }
 }
+*/
 
-export default ToDoList
+const NewToDoList = () => {
+  const [listSample, setListSample] = useState([
+    {id: 1, todo: '11111jh', checked: true},
+    {id: 2, todo: '22222', checked: false},
+    {id: 3, todo: '333333', checked: false},
+    {id: 4, todo: '444444', checked: false}
+  ])
+  const [value, setValue] = useState('')
+
+  const onChangeCheckBox = (id, flag) => {
+    const target = listSample.find(it => it.id === id)
+    target.checked = flag
+  }
+
+  const todoDelete = (id) => {
+    console.log(id)
+    const target = listSample.find(it => it.id === id)
+    const newListSample = listSample.filter(it => it !== target)
+    setListSample(newListSample)
+    console.log(newListSample)
+  }
+
+  const valueFix = (event) => { setValue(event.target.value) }
+
+  const onAddTodo = () => {
+    const ids = listSample.map(it => it.id)
+    let targetId
+    if(ids.length === 0) targetId = 1
+    else targetId = Math.max(...ids) + 1
+    const target = {id: targetId, todo: value, checked: false}
+    listSample.push(target)
+    console.log(listSample)
+    setValue('')
+  }
+
+  const listJSX = listSample.map((it, idx) =>
+    <div key={it.id}>
+      <ToDo data={it} onChangeChecked={onChangeCheckBox} onDelete={todoDelete} />
+    </div>
+  )
+  return (
+    <div>
+      <h3>This is Todo List</h3>
+      <hr/>
+      {listJSX}
+      <input type="text" value={value} onChange={valueFix} />
+      <button onClick={onAddTodo}>Add</button>
+    </div>
+  );
+}
+
+export default NewToDoList
